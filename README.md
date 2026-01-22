@@ -1,7 +1,3 @@
-Perfect. Below is a **clean, professional, portfolio-ready README** you can paste directly into your repo and tweak names/links if needed.
-This is written the way **reviewers, recruiters, and senior devs expect**.
-
----
 
 # 🎉 Slotify — Event Booking Platform
 
