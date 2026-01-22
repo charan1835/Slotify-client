@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"; // only for auth
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://slotify-server.vercel.app",
 });
 
 // Add authorization token to requests

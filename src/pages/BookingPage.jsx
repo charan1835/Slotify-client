@@ -5,7 +5,7 @@ import axios from 'axios';
 import { addBooking } from '../redux/bookingSlice';
 
 const API = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://slotify-server.vercel.app',
 });
 
 // Add authorization token to requests
@@ -79,7 +79,7 @@ const BookingPage = () => {
     const handlePayment = async () => {
         try {
             // 1. Create Order
-            const orderUrl = "http://localhost:5000/payments/orders";
+            const orderUrl = "https://slotify-server.vercel.app/payments/orders";
             const { data: order } = await axios.post(orderUrl, { amount: vendor.price });
 
             const options = {
@@ -93,7 +93,7 @@ const BookingPage = () => {
                 handler: async function (response) {
                     try {
                         // 2. Verify Payment
-                        const verifyUrl = "http://localhost:5000/payments/verify";
+                        const verifyUrl = "https://slotify-server.vercel.app/payments/verify";
                         const { data: verifyData } = await axios.post(verifyUrl, response);
 
                         // 3. Create Booking if verified

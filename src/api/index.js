@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: "https://slotify-server.vercel.app/",
 });
 
 API.interceptors.request.use((req) => {
