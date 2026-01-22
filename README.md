@@ -176,16 +176,7 @@ If you’d like to discuss this project or provide feedback, feel free to reach 
 
 ---
 
-### 🔥 Final note (for you, not the repo)
-
-This README positions you as someone who:
-
-* ships complete systems
-* understands production concerns
-* doesn’t just “build features”
-
-If you want next, I can:
-
+-by charan ❤️
 * tailor this README for **internship vs full-time**
 * rewrite it for **resume bullets**
 * review it like a **hiring manager**
