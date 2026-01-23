@@ -15,6 +15,7 @@ import ProfilePage from './pages/ProfilePage';
 import BookingPage from './pages/BookingPage';
 import EventsPage from './pages/EventsPage';
 import AboutPage from './pages/AboutPage';
+import AdminDashboard from './pages/AdminDashboard';
 
 import './App.css';
 
@@ -108,6 +109,7 @@ function App() {
           <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/book/:vendorId" element={<BookingPage />} />
           <Route path="/login" element={<Navigate to="/auth" replace />} />
           <Route path="/register" element={<Navigate to="/auth" replace />} />

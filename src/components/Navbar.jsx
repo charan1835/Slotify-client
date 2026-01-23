@@ -29,7 +29,7 @@ const Navbar = () => {
                 <div className="flex justify-between items-center">
                     {/* Logo */}
                     <Link to="/" className={`text-2xl font-black tracking-tighter transition ${isScrolled ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'}`}>
-                        Slotify<span className="text-yellow-500">.</span>
+                        Slotify
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -44,9 +44,11 @@ const Navbar = () => {
                             About
                         </Link>
                         {isAuthenticated && (
-                            <Link to="/my-bookings" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition">
-                                My Bookings
-                            </Link>
+                            <>
+                                <Link to="/my-bookings" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition">
+                                    My Bookings
+                                </Link>
+                            </>
                         )}
                     </div>
 
