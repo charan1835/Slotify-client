@@ -152,54 +152,76 @@ const BookingPage = () => {
         handlePayment();
     };
 
-    if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    if (loading) return <div className="flex justify-center items-center h-screen"><div className="animate-spin w-12 h-12 border-4 border-violet-600 border-t-transparent rounded-full"></div></div>;
     if (error) return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
     if (!vendor) return null;
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-20 pb-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-4xl mx-auto">
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-colors duration-300">
-                    <div className="md:flex">
+                    {/* Mobile/Tablet: Stacked Layout, Desktop: Side-by-side */}
+                    <div className="flex flex-col md:flex-row">
                         {/* Vendor Info Side */}
-                        <div className="md:w-1/3 bg-slate-900 text-white p-8 flex flex-col justify-between relative overflow-hidden">
+                        <div className="md:w-2/5 bg-gradient-to-br from-violet-600 via-fuchsia-600 to-pink-600 text-white p-6 sm:p-8 relative overflow-hidden">
+                            {/* Decorative Elements */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                            <div className="absolute bottom-0 left-0 w-40 h-40 bg-black/10 rounded-full -ml-20 -mb-20"></div>
+
                             <div className="relative z-10">
-                                <h2 className="text-3xl font-bold mb-2">{vendor.name}</h2>
-                                <div className="flex items-center mb-6 text-yellow-400">
-                                    <span className="text-xl mr-1">★</span>
-                                    <span className="font-medium">{vendor.rating || 4.5}</span>
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl">
+                                        ✨
+                                    </div>
+                                    <div>
+                                        <p className="text-white/80 text-xs font-medium uppercase tracking-wider">Booking Details</p>
+                                        <h2 className="text-2xl sm:text-3xl font-bold">{vendor.name}</h2>
+                                    </div>
                                 </div>
-                                <div className="space-y-4 text-gray-300">
-                                    <p className="flex items-center">
-                                        <span className="mr-3 text-lg">💰</span>
-                                        ₹{vendor.price} - ₹{vendor.maxPrice}
-                                    </p>
-                                    <p className="flex items-center">
-                                        <span className="mr-3 text-lg">📧</span>
-                                        {vendor.email || "Contact vendor"}
-                                    </p>
+
+                                <div className="flex items-center mb-6 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 w-fit">
+                                    <span className="text-xl mr-2">★</span>
+                                    <span className="font-bold text-lg">{vendor.rating || 4.5}</span>
+                                    <span className="text-white/70 text-sm ml-1">/5</span>
+                                </div>
+
+                                <div className="space-y-3 text-white/90">
+                                    <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-xl p-3">
+                                        <span className="text-lg mt-0.5">💰</span>
+                                        <div>
+                                            <p className="text-white/60 text-xs uppercase font-medium mb-1">Price Range</p>
+                                            <p className="font-bold">₹{vendor.price} - ₹{vendor.maxPrice}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-xl p-3">
+                                        <span className="text-lg mt-0.5">📧</span>
+                                        <div>
+                                            <p className="text-white/60 text-xs uppercase font-medium mb-1">Email</p>
+                                            <p className="font-medium text-sm break-all">{vendor.email || "Contact vendor"}</p>
+                                        </div>
+                                    </div>
                                     {vendor.phone && (
-                                        <p className="flex items-center">
-                                            <span className="mr-3 text-lg">📱</span>
-                                            {vendor.phone}
-                                        </p>
+                                        <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-xl p-3">
+                                            <span className="text-lg mt-0.5">📱</span>
+                                            <div>
+                                                <p className="text-white/60 text-xs uppercase font-medium mb-1">Phone</p>
+                                                <p className="font-medium">{vendor.phone}</p>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                             </div>
-
-                            {/* Decorative Circle */}
-                            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-slate-800 rounded-full opacity-50"></div>
                         </div>
 
                         {/* Booking Form Side */}
-                        <div className="md:w-2/3 p-8 md:p-12">
-                            <div className="mb-8">
-                                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Complete your Booking</h1>
-                                <p className="text-gray-500 dark:text-gray-400 mt-1">Fill in the details below to secure your date.</p>
+                        <div className="md:w-3/5 p-6 sm:p-8 lg:p-12">
+                            <div className="mb-6 sm:mb-8">
+                                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Complete your Booking</h1>
+                                <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base">Fill in the details below to secure your date.</p>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
                                         <input
@@ -208,7 +230,7 @@ const BookingPage = () => {
                                             required
                                             value={formData.userName}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-slate-900 dark:focus:border-white focus:ring-0 transition outline-none"
+                                            className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-violet-500 dark:focus:border-violet-400 focus:ring-0 transition outline-none"
                                             placeholder="Your Name"
                                         />
                                     </div>
@@ -220,7 +242,7 @@ const BookingPage = () => {
                                             required
                                             value={formData.userPhone}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-slate-900 dark:focus:border-white focus:ring-0 transition outline-none"
+                                            className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-violet-500 dark:focus:border-violet-400 focus:ring-0 transition outline-none"
                                             placeholder="+91 98765 43210"
                                         />
                                     </div>
@@ -234,7 +256,7 @@ const BookingPage = () => {
                                         required
                                         value={formData.userEmail}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-slate-900 dark:focus:border-white focus:ring-0 transition outline-none"
+                                        className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-violet-500 dark:focus:border-violet-400 focus:ring-0 transition outline-none"
                                         placeholder="you@example.com"
                                     />
                                 </div>
@@ -247,7 +269,7 @@ const BookingPage = () => {
                                         required
                                         value={formData.eventDate}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-slate-900 dark:focus:border-white focus:ring-0 transition outline-none"
+                                        className="w-full px-4 py-3 sm:py-3.5 rounded-xl bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-violet-500 dark:focus:border-violet-400 focus:ring-0 transition outline-none"
                                     />
                                 </div>
 
@@ -258,7 +280,7 @@ const BookingPage = () => {
                                         value={formData.notes}
                                         onChange={handleChange}
                                         rows="3"
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-slate-900 dark:focus:border-white focus:ring-0 transition outline-none resize-none"
+                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-violet-500 dark:focus:border-violet-400 focus:ring-0 transition outline-none resize-none"
                                         placeholder="Any specific requirements or questions..."
                                     ></textarea>
                                 </div>
@@ -266,10 +288,14 @@ const BookingPage = () => {
                                 <div className="pt-4">
                                     <button
                                         type="submit"
-                                        className="w-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold py-4 rounded-xl hover:bg-slate-800 dark:hover:bg-gray-200 transform hover:-translate-y-0.5 transition duration-200 shadow-lg hover:shadow-xl"
+                                        className="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-xl hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg"
                                     >
+                                        <span>💳</span>
                                         Pay & Confirm Booking
                                     </button>
+                                    <p className="text-center mt-3 text-xs text-gray-500 dark:text-gray-400">
+                                        🔒 Secure payment powered by Razorpay
+                                    </p>
                                 </div>
                             </form>
                         </div>

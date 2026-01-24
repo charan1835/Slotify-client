@@ -23,27 +23,27 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
-    <div className="space-y-16 pb-16">
+    <div className="space-y-12 sm:space-y-16 pb-12 sm:pb-16">
       {/* Hero Section */}
-      <section className="relative bg-slate-900 text-white rounded-3xl overflow-hidden min-h-[500px] flex items-center justify-center -mt-4 mx-4 sm:mx-0">
+      <section className="relative bg-slate-900 text-white rounded-2xl sm:rounded-3xl overflow-hidden min-h-[400px] sm:min-h-[500px] flex items-center justify-center mt-4 mx-4 sm:mx-0">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-40"></div>
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <span className="text-yellow-400 font-bold tracking-wider uppercase text-sm mb-4 block animate-in fade-in slide-in-from-bottom-4 duration-700">Premium Event Services</span>
-          <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tight leading-tight animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto py-12 sm:py-0">
+          <span className="text-yellow-400 font-bold tracking-wider uppercase text-xs sm:text-sm mb-3 sm:mb-4 block animate-in fade-in slide-in-from-bottom-4 duration-700">Premium Event Services</span>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold mb-4 sm:mb-6 tracking-tight leading-tight animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
             Make Your Event <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500">Unforgettable</span>
           </h1>
-          <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+          <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 px-4">
             Discover and book the best photographers, venues, and caterers for your special day.
           </p>
 
           {/* Search Bar */}
-          <div className="bg-white/10 backdrop-blur-md p-2 rounded-full max-w-xl mx-auto border border-white/20 flex animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 shadow-2xl">
+          <div className="bg-white/10 backdrop-blur-md p-2 rounded-full max-w-xl mx-auto border border-white/20 flex flex-col sm:flex-row gap-2 sm:gap-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 shadow-2xl">
             <input
               type="text"
               placeholder="Search for vendors or services..."
-              className="flex-grow bg-transparent border-none text-white placeholder-gray-300 px-6 py-3 focus:outline-none w-full"
+              className="flex-grow bg-transparent border-none text-white placeholder-gray-300 px-4 sm:px-6 py-3 focus:outline-none w-full text-sm sm:text-base"
             />
-            <button className="bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition whitespace-nowrap">
+            <button className="bg-white text-slate-900 px-6 sm:px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition whitespace-nowrap text-sm sm:text-base">
               Search
             </button>
           </div>
@@ -52,13 +52,13 @@ const Home = () => {
 
       {/* Popular Cities */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Popular Destinations</h2>
-          <p className="text-gray-500 dark:text-gray-400">Find vendors in these trending locations</p>
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Popular Destinations</h2>
+          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1">Find vendors in these trending locations</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           {['Mumbai', 'Delhi', 'Bangalore', 'Goa'].map(city => (
-            <div key={city} className="bg-white dark:bg-slate-800 border dark:border-gray-700 hover:border-black dark:hover:border-white transition p-4 rounded-xl text-center font-medium cursor-pointer text-gray-700 dark:text-gray-200 hover:text-black dark:hover:text-white hover:shadow-md">
+            <div key={city} className="bg-white dark:bg-slate-800 border dark:border-gray-700 hover:border-black dark:hover:border-white transition p-4 sm:p-4 rounded-xl text-center font-medium cursor-pointer text-gray-700 dark:text-gray-200 hover:text-black dark:hover:text-white hover:shadow-md text-sm sm:text-base">
               📍 {city}
             </div>
           ))}
@@ -66,8 +66,8 @@ const Home = () => {
       </section>
 
       {/* Categories */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-slate-800 py-12 rounded-3xl transition-colors duration-300">
-        <h2 className="text-3xl font-bold mb-8 text-center text-slate-900 dark:text-white">Browse by Category</h2>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-slate-800 py-8 sm:py-12 rounded-2xl sm:rounded-3xl transition-colors duration-300">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-slate-900 dark:text-white">Browse by Category</h2>
         <CategoryList onSelectCategory={setSelectedCategory} />
       </section>
 
@@ -75,8 +75,8 @@ const Home = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[400px]">
         {selectedCategory ? (
           <div className="animate-in fade-in duration-500">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Selected Category</h2>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-0">
+              <h2 className="text-xl sm:text-2xl font-bold">Selected Category</h2>
               <button onClick={() => setSelectedCategory(null)} className="text-sm underline text-gray-500 hover:text-black">Clear Filter</button>
             </div>
             <VendorList categoryId={selectedCategory} />
