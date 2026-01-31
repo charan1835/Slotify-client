@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"; // only for auth
-import axios from "axios";
-
-const API = axios.create({
-  baseURL: "https://slotify-server.vercel.app",
-});
-
-// Add authorization token to requests
-API.interceptors.request.use((req) => {
-  const profile = localStorage.getItem("profile");
-  if (profile) {
-    req.headers.Authorization = `Bearer ${JSON.parse(profile).token}`;
-  }
-  return req;
-});
+import { getVendorsByCategory } from "../api";
 
 const VendorList = ({ categoryId }) => {
   const [vendors, setVendors] = useState([]);
@@ -34,8 +21,7 @@ const VendorList = ({ categoryId }) => {
         // For now, let's assume we stick to category selection in the main flow, OR we fix the backend.
         // Let's FIX THE BACKEND to allow optional categoryId for "All Vendors".
 
-        const params = categoryId ? { categoryId } : {};
-        const { data } = await API.get("/vendors", { params });
+        const { data } = await getVendorsByCategory(categoryId);
         setVendors(data);
       } catch (err) {
         console.error("Fetch error", err);

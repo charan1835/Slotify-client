@@ -1,21 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
-import { addBooking } from '../redux/bookingSlice';
-
-const API = axios.create({
-    baseURL: 'https://slotify-server.vercel.app',
-});
-
-// Add authorization token to requests
-API.interceptors.request.use((req) => {
-    const profile = localStorage.getItem('profile');
-    if (profile) {
-        req.headers.Authorization = `Bearer ${JSON.parse(profile).token}`;
-    }
-    return req;
-});
+import { getVendorById, createPaymentOrder, verifyPayment, createBooking } from '../api';
 
 const BookingPage = () => {
     const { vendorId } = useParams();
@@ -57,7 +43,7 @@ const BookingPage = () => {
                 // If it's a fake ID (demo mode), handle it gracefully or Mock it
                 // For now, let's try to fetch. If it fails (404/500), we might need to fallback if we are in demo mode.
                 // However, since we seeded the DB, we should be fine!
-                const { data } = await API.get(`/vendors/${vendorId}`);
+                const { data } = await getVendorById(vendorId);
                 setVendor(data);
             } catch (err) {
                 console.error("Failed to fetch vendor", err);
@@ -79,8 +65,7 @@ const BookingPage = () => {
     const handlePayment = async () => {
         try {
             // 1. Create Order
-            const orderUrl = "https://slotify-server.vercel.app/payments/orders";
-            const { data: order } = await axios.post(orderUrl, { amount: vendor.price });
+            const { data: order } = await createPaymentOrder(vendor.price);
 
             const options = {
                 key: "rzp_test_S71JJCHJsHAhHl", // Enter the Key ID generated from the Dashboard
@@ -93,12 +78,11 @@ const BookingPage = () => {
                 handler: async function (response) {
                     try {
                         // 2. Verify Payment
-                        const verifyUrl = "https://slotify-server.vercel.app/payments/verify";
-                        const { data: verifyData } = await axios.post(verifyUrl, response);
+                        const { data: verifyData } = await verifyPayment(response);
 
                         // 3. Create Booking if verified
                         if (verifyData.message === "Payment verified successfully") {
-                            await createBooking();
+                            await handleCreateBooking();
                         } else {
                             alert("Payment verification failed!");
                         }
@@ -131,19 +115,28 @@ const BookingPage = () => {
         }
     };
 
-    const createBooking = async () => {
+    const handleCreateBooking = async (status = "confirmed") => {
         try {
-            await API.post("/bookings", {
+            await createBooking({
                 vendorId,
                 ...formData,
-                status: "confirmed", // Since payment is successful
+                status: status,
             });
-            alert("Booking confirmed! Payment Successful.");
+            alert(`Booking ${status === 'confirmed' ? 'confirmed' : 'requested'}! ${status === 'confirmed' ? 'Payment Successful.' : 'Awaiting Payment.'}`);
             navigate('/my-bookings');
         } catch (err) {
-            console.error("Booking creation failed after payment", err);
-            alert("Payment successful but booking creation failed. Please contact support.");
+            console.error("Booking creation failed", err);
+            alert("Booking creation failed. Please contact support.");
         }
+    };
+
+    const handlePayLater = async () => {
+        // Basic Validation
+        if (!formData.userName || !formData.userEmail || !formData.eventDate) {
+            alert("Please fill in all required fields");
+            return;
+        }
+        await handleCreateBooking("pending");
     };
 
     const handleSubmit = async (e) => {
@@ -285,18 +278,26 @@ const BookingPage = () => {
                                     ></textarea>
                                 </div>
 
-                                <div className="pt-4">
+                                <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                                    <button
+                                        type="button"
+                                        onClick={handlePayLater}
+                                        className="w-full sm:w-1/2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-bold py-4 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg"
+                                    >
+                                        <span>⏳</span>
+                                        Pay Later
+                                    </button>
                                     <button
                                         type="submit"
-                                        className="w-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-xl hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg"
+                                        className="w-full sm:w-1/2 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-xl hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg"
                                     >
                                         <span>💳</span>
-                                        Pay & Confirm Booking
+                                        Pay & Confirm
                                     </button>
-                                    <p className="text-center mt-3 text-xs text-gray-500 dark:text-gray-400">
-                                        🔒 Secure payment powered by Razorpay
-                                    </p>
                                 </div>
+                                <p className="text-center mt-3 text-xs text-gray-500 dark:text-gray-400">
+                                    🔒 Secure payment powered by Razorpay
+                                </p>
                             </form>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://slotify-server.vercel.app/",
+    baseURL: "https://slotify-server.vercel.app",
 });
 
 API.interceptors.request.use((req) => {
@@ -40,3 +40,13 @@ export const getVendorsByCategory = (categoryId) =>
 
 export const getVendorById = (id) =>
     API.get(`/vendors/${id}`);
+
+/* NOTIFICATIONS */
+export const fetchNotifications = () => API.get("/notifications");
+export const markNotificationAsRead = (id) => API.put(`/notifications/${id}/read`);
+export const markAllNotificationsAsRead = () => API.put("/notifications/read-all");
+export const deleteNotification = (id) => API.delete(`/notifications/${id}`);
+
+/* PAYMENTS */
+export const createPaymentOrder = (amount) => API.post("/payments/orders", { amount });
+export const verifyPayment = (paymentData) => API.post("/payments/verify", paymentData);

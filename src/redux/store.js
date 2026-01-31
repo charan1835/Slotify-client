@@ -4,6 +4,7 @@ import categoryReducer from './categorySlice';
 import vendorReducer from './vendorSlice';
 import bookingReducer from './bookingSlice';
 import authReducer from './authSlice';
+import notificationReducer from './notificationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,5 +12,6 @@ export const store = configureStore({
     vendor: vendorReducer,
     booking: bookingReducer,
     auth: authReducer,
+    notification: notificationReducer,
   },
 });

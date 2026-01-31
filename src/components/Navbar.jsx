@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/authSlice';
+import { fetchNotifications } from '../redux/notificationSlice';
+import NotificationList from './Notifications/NotificationList';
 
 const Navbar = () => {
     const { isAuthenticated, user } = useSelector((state) => state.auth);
+    const { unreadCount } = useSelector((state) => state.notification);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
 
     // Add scroll listener
-    React.useEffect(() => {
+    useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 10);
         };
@@ -19,8 +23,15 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Fetch notifications if authenticated
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(fetchNotifications());
+        }
+    }, [isAuthenticated, dispatch]);
+
     // Prevent body scroll when mobile menu is open
-    React.useEffect(() => {
+    useEffect(() => {
         if (mobileMenuOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -73,6 +84,24 @@ const Navbar = () => {
                         <div className="hidden md:flex items-center space-x-4">
                             {isAuthenticated ? (
                                 <div className="flex items-center gap-4">
+                                    {/* Notification Bell */}
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setShowNotifications(!showNotifications)}
+                                            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition relative"
+                                        >
+                                            <span className="text-xl">🔔</span>
+                                            {unreadCount > 0 && (
+                                                <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-white dark:border-slate-900">
+                                                    {unreadCount > 9 ? '9+' : unreadCount}
+                                                </span>
+                                            )}
+                                        </button>
+                                        {showNotifications && (
+                                            <NotificationList onClose={() => setShowNotifications(false)} />
+                                        )}
+                                    </div>
+
                                     <Link to="/profile" className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white hover:opacity-70 transition">
                                         <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-xs text-gray-700 dark:text-gray-200">
                                             {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
@@ -164,6 +193,20 @@ const Navbar = () => {
                             <span className="text-xl">🎉</span>
                             Events
                         </Link>
+                        {isAuthenticated && (
+                            <div
+                                onClick={() => { setShowNotifications(!showNotifications); closeMobileMenu(); }}
+                                className="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition font-medium cursor-pointer"
+                            >
+                                <span className="text-xl relative">
+                                    🔔
+                                    {unreadCount > 0 && (
+                                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border border-white dark:border-slate-800"></span>
+                                    )}
+                                </span>
+                                Notifications
+                            </div>
+                        )}
                         <Link
                             to="/about"
                             onClick={closeMobileMenu}
