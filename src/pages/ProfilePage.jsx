@@ -10,7 +10,8 @@ import { updateUserProfile } from '../redux/authSlice';
 // Or maybe implement a simple edit form.
 
 const ProfilePage = () => {
-    const { user, isAuthenticated } = useSelector((state) => state.auth);
+    const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
+
     const navigate = useNavigate();
     const dispatch = useDispatch(); // If we add update action
 
@@ -33,6 +34,7 @@ const ProfilePage = () => {
     }, [user]);
 
     const handleSave = async () => {
+        if (loading) return;
         try {
             const resultAction = await dispatch(updateUserProfile({ name, phone }));
             if (updateUserProfile.fulfilled.match(resultAction)) {
@@ -102,9 +104,10 @@ const ProfilePage = () => {
                                 </button>
                                 <button
                                     onClick={handleSave}
-                                    className="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium hover:opacity-90 transition"
+                                    disabled={loading}
+                                    className="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium hover:opacity-90 transition disabled:opacity-50"
                                 >
-                                    Save Changes
+                                    {loading ? 'Saving...' : 'Save Changes'}
                                 </button>
                             </>
                         ) : (

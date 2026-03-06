@@ -12,6 +12,16 @@ API.interceptors.request.use((req) => {
     return req;
 });
 
+API.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 429) {
+            alert(error.response.data.message || "Too many requests, please try again later.");
+        }
+        return Promise.reject(error);
+    }
+);
+
 /* AUTH */
 export const sendOtp = (data) => API.post("/auth/send-otp", data);
 export const verifyOtp = (data) => API.post("/auth/verify-otp", data);

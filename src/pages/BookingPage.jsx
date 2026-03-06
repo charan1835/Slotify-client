@@ -21,6 +21,8 @@ const BookingPage = () => {
         notes: '',
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     useEffect(() => {
         if (!isAuthenticated) {
             navigate('/auth');
@@ -63,6 +65,8 @@ const BookingPage = () => {
     };
 
     const handlePayment = async () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
         try {
             // 1. Create Order
             const { data: order } = await createPaymentOrder(vendor.price);
@@ -85,10 +89,12 @@ const BookingPage = () => {
                             await handleCreateBooking();
                         } else {
                             alert("Payment verification failed!");
+                            setIsSubmitting(false);
                         }
                     } catch (error) {
                         console.error("Payment Verification Error", error);
                         alert("Payment verification failed. Please contact support.");
+                        setIsSubmitting(false);
                     }
                 },
                 prefill: {
@@ -102,16 +108,23 @@ const BookingPage = () => {
                 theme: {
                     color: "#0f172a", // Match slate-900
                 },
+                modal: {
+                    ondismiss: function () {
+                        setIsSubmitting(false);
+                    }
+                }
             };
 
             const rzp1 = new window.Razorpay(options);
             rzp1.on("payment.failed", function (response) {
                 alert(response.error.description);
+                setIsSubmitting(false);
             });
             rzp1.open();
         } catch (error) {
             console.error("Payment Order Creation Error", error);
             alert("Could not initiate payment. Server error.");
+            setIsSubmitting(false);
         }
     };
 
@@ -127,6 +140,8 @@ const BookingPage = () => {
         } catch (err) {
             console.error("Booking creation failed", err);
             alert("Booking creation failed. Please contact support.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -136,6 +151,8 @@ const BookingPage = () => {
             alert("Please fill in all required fields");
             return;
         }
+        if (isSubmitting) return;
+        setIsSubmitting(true);
         await handleCreateBooking("pending");
     };
 
@@ -282,17 +299,19 @@ const BookingPage = () => {
                                     <button
                                         type="button"
                                         onClick={handlePayLater}
-                                        className="w-full sm:w-1/2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-bold py-4 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg"
+                                        disabled={isSubmitting}
+                                        className="w-full sm:w-1/2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-bold py-4 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <span>⏳</span>
-                                        Pay Later
+                                        {isSubmitting ? 'Processing...' : 'Pay Later'}
                                     </button>
                                     <button
                                         type="submit"
-                                        className="w-full sm:w-1/2 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-xl hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg"
+                                        disabled={isSubmitting}
+                                        className="w-full sm:w-1/2 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-xl hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition duration-200 flex items-center justify-center gap-2 text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <span>💳</span>
-                                        Pay & Confirm
+                                        {isSubmitting ? 'Processing...' : 'Pay & Confirm'}
                                     </button>
                                 </div>
                                 <p className="text-center mt-3 text-xs text-gray-500 dark:text-gray-400">
