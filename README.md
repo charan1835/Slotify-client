@@ -177,8 +177,3 @@ If you’d like to discuss this project or provide feedback, feel free to reach 
 ---
 
 -by charan ❤️
-* tailor this README for **internship vs full-time**
-* rewrite it for **resume bullets**
-* review it like a **hiring manager**
-
-Just say the word.
